@@ -1,9 +1,9 @@
 
 # Welcome to Substrate Collectables Workshop!
 
-**Workshop link:** [here](https://sacha-l.github.io/substrate-collectables-workshop/#/workshop/start).
+**Workshop link:** [here](https://immanuel-john.github.io/substrate-collectables-workshop/#/workshop/start).
 
-This was created for the Substrate Workshop at ETH Denver 2022 and is based on Substrate's [Kitties tutorial](https://docs.substrate.io/tutorials/v3/kitties/pt1/).
+This was created for the Ternoa Substrate Workshop and is based on Substrate's [Kitties tutorial](https://docs.substrate.io/tutorials/v3/kitties/pt1/).
 
 In this workshop, you'll learn how to build a custom Substrate blockchain that can create and manage Kitty NFTs.
 
