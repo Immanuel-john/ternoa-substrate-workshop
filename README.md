@@ -1,11 +1,11 @@
 
 # Welcome to Substrate Collectables Workshop!
 
-**Workshop link:** [here](https://immanuel-john.github.io/substrate-collectables-workshop/#/workshop/start).
+**Workshop link:** [here](https://immanuel-john.github.io/ternoa-substrate-workshop/#/workshop/start).
 
-This was created for the Ternoa Substrate Workshop and is based on Substrate's [Kitties tutorial](https://docs.substrate.io/tutorials/v3/kitties/pt1/).
+This was created for the Ternoa Substrate Workshop.
 
-In this workshop, you'll learn how to build a custom Substrate blockchain that can create and manage Kitty NFTs.
+In this workshop, you'll learn how to build a custom Substrate blockchain that can feed oracle event.
 
 To follow along for this workshop, you'll either need:
 
@@ -16,7 +16,7 @@ To follow along for this workshop, you'll either need:
 
 * The basic patterns for building and running a Substrate node on your local machine.
 * The basics of [Rust](https://www.rust-lang.org/) as used in Substrate.
-* How to write a custom FRAME Pallet which can create and manage NFTs.
+* How to write a custom FRAME Pallet for an oracle event feed.
 	* Create custom types.
 	* Manage custom storage.
 	* Write custom logic and callable functions.
