@@ -1,5 +1,5 @@
 
-# Welcome to Substrate Collectables Workshop!
+# Welcome to Ternoa Substrate Workshop!
 
 **Workshop link:** [here](https://immanuel-john.github.io/ternoa-substrate-workshop/#/workshop/start).
 
