@@ -15,7 +15,6 @@ As runtime engineers, a pallet provides you a way to:
 * Specify some callable functions for your blockchain
 * Emit events and errors
 * Specify some custom logic for callable functions
-* Generate metadata
 
 This gives you a lot of flexibility for the logic you're writing, but this means you have a lot of responsibility for carefully handling errors.
 

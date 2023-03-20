@@ -59,14 +59,15 @@ pub trait Config: frame_system::Config {
 	// The type used across your runtime for emitting events.
 	type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 
-	// The interface used to manage user balances from this pallet.
-	type Currency: Currency<Self::AccountId>;
+	///Time provider for getting timestamp
+	type TimeProvider: UnixTime;
 
-	// A configurable max value,
+	/// Maximum length for Oracle Event.
 	#[pallet::constant]
-	type MaxValue: Get<u32>;
+	type OracleEventLength: Get<u32>;
 
-	// The interface used to get random values to use in this pallet.
-	type RandomnessProvider: Randomness<Self::Hash, Self::BlockNumber>;
+	/// Maximum time for storing an Oracle Event.
+	#[pallet::constant]
+	type MaxTimeForEvents: Get<u64>;
 }
 ```
