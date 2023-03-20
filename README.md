@@ -19,7 +19,7 @@ To follow along for this workshop, you'll either need:
 * How to write a custom FRAME Pallet for an oracle event feed.
 	* Create custom types.
 	* Manage custom storage.
-	* Write custom logic and callable functions.
+	* Write custom logic and callable functions for oracle feed.
 * Integrate your new pallet into your Substrate runtime.
 
 We have a lot to cover.
