@@ -31,4 +31,4 @@ So let's get right to it!
 
 ![substrate](assets/final-polkadotjs.png)
 
-**Acknowledgements:** thank you to Shawn for the original tutorial, inspired by the [crypto zombies tutorial](https://cryptozombies.io/en/lesson/1/chapter/1).
+**Acknowledgements:** thank you to Shawn for the original tutorial.
