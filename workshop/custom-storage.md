@@ -2,16 +2,11 @@
 
 Our Pallet will use 3 storage items to track all of the state.
 
-1. A `StorageValue` named `CountForKitties` which will keep track of the total number of kitties in the Pallet.
-	* This `StorageValue` simply keeps track of a `u64` value that we increment when we generate a new kitty. This means we could have up to `18_446_744_073_709_551_615` kitties.... probably more than we will ever need to worry about.
-	* It is worth noting the `ValueQuery` configuration in the `StorageValue`. This basically assumes if there is no value in storage, for example at the start of the network, that we should return the value `0` rather than an option `None`.
-2. A `StorageMap` named `Kitties` which will map each kitty to it's unique information.
-	* To keep kitties completely unique and easy to look up, the key of our map is the `dna` of the kitty. As such, we cannot have two kitties with the same `dna` since the map will have already been populated by one of them.
-	*
-3. A `StorageMap` named `KittiesOwned` which will map each user to the list of kitties they own.
-	* The key for this storage map will be a user account: `T::AccountID`.
-	* The value for this storage map will be a `BoundedVec` with the `dna` of the kitties they own. This will make it easy to then look up each individual kitty for its information since the `dna` is used as the key for the `Kitties` map.
+1. A `StorageValue` named `OracleEventFeed` which will keep track of all the events in the Pallet.
+	* This `StorageValue` simply keeps track of a `BoundedVec<OracleEvent>` where all the event feed will be appended. 
 	* By using a `BoundedVec`, we ensure that each storage item has a maximum length, which is important for managing limits within the runtime.
+	* It is worth noting the `ValueQuery` configuration in the `StorageValue`. This basically assumes if there is no value in storage, for example at the start of the network, that we should return the default value rather than an option `None`.
+
 
 <!-- slide:break-40 -->
 
@@ -19,24 +14,15 @@ Our Pallet will use 3 storage items to track all of the state.
 
 #### ** ACTION ITEMS **
 
-Add the following custom storage items to your Pallet.
+Add the following custom storage item to your Pallet.
 
 ```rust
-/// Keeps track of the number of kitties in existence.
+/// Oracle Event Feed for storing event details posted by root account
 #[pallet::storage]
-pub(super) type CountForKitties<T: Config> = StorageValue<_, u64, ValueQuery>;
-
-/// Maps the kitty struct to the kitty DNA.
-#[pallet::storage]
-pub(super) type Kitties<T: Config> = StorageMap<_, Twox64Concat, [u8; 16], Kitty<T>>;
-
-/// Track the kitties owned by each account.
-#[pallet::storage]
-pub(super) type KittiesOwned<T: Config> = StorageMap<
+#[pallet::getter(fn oracle_event_feed)]
+pub type OracleEventFeed<T: Config> = StorageValue<
 	_,
-	Twox64Concat,
-	T::AccountId,
-	BoundedVec<[u8; 16], T::MaxKittiesOwned>,
+	BoundedVec<OracleEvent<T::OracleEventLength>, T::OracleEventLength>,
 	ValueQuery,
 >;
 ```
@@ -61,52 +47,41 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 
-	use frame_support::traits::{Currency, Randomness};
+	use frame_support::{traits::UnixTime};
 
 	// The basis which we buil
 	#[pallet::pallet]
 	pub struct Pallet<T>(_);
 
-	// Allows easy access our Pallet's `Balance` type. Comes from `Currency` interface.
-	type BalanceOf<T> =
-		<<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance;
-
-	// The Gender type used in the `Kitty` struct
-	#[derive(Clone, Encode, Decode, PartialEq, Copy, RuntimeDebug, TypeInfo, MaxEncodedLen)]
-	pub enum Gender {
-		Male,
-		Female,
+	/// Data related to Oracle Event
+	#[derive(Encode, Decode, Default, TypeInfo, Clone, MaxEncodedLen)]
+	#[scale_info(skip_type_params(OracleEventLength))]
+	pub struct OracleEvent<OracleEventLength> {
+		pub event_name: BoundedVec<u8, OracleEventLength>,
+		pub event_details: BoundedVec<u8, OracleEventLength>,
+		pub timestamp: u64,
 	}
 
-	// Struct for holding kitty information
-	#[derive(Clone, Encode, Decode, PartialEq, RuntimeDebug, TypeInfo, MaxEncodedLen, Copy)]
-	#[scale_info(skip_type_params(T))]
-	pub struct Kitty<T: Config> {
-		// Using 16 bytes to represent a kitty DNA
-		pub dna: [u8; 16],
-		// `None` assumes not for sale
-		pub price: Option<BalanceOf<T>>,
-		pub gender: Gender,
-		pub owner: T::AccountId,
+	impl<OracleEventLength> OracleEvent<OracleEventLength> {
+		pub fn new(
+			event_name: BoundedVec<u8, OracleEventLength>,
+			event_details: BoundedVec<u8, OracleEventLength>,
+			timestamp: u64,
+		) -> OracleEvent<OracleEventLength> {
+			Self { event_name, event_details, timestamp }
+		}
 	}
 
-	/// Keeps track of the number of kitties in existence.
+	/// Oracle Event Feed for storing event details posted by root account
 	#[pallet::storage]
-	pub(super) type CountForKitties<T: Config> = StorageValue<_, u64, ValueQuery>;
-
-	/// Maps the kitty struct to the kitty DNA.
-	#[pallet::storage]
-	pub(super) type Kitties<T: Config> = StorageMap<_, Twox64Concat, [u8; 16], Kitty<T>>;
-
-	/// Track the kitties owned by each account.
-	#[pallet::storage]
-	pub(super) type KittiesOwned<T: Config> = StorageMap<
+	#[pallet::getter(fn oracle_event_feed)]
+	pub type OracleEventFeed<T: Config> = StorageValue<
 		_,
-		Twox64Concat,
-		T::AccountId,
-		BoundedVec<[u8; 16], T::MaxKittiesOwned>,
+		BoundedVec<OracleEvent<T::OracleEventLength>, T::OracleEventLength>,
 		ValueQuery,
 	>;
+
+	/* Placeholder for defining custom storage items. */
 
 	// Your Pallet's configuration trait, representing custom external types and interfaces.
 	#[pallet::config]
@@ -114,17 +89,17 @@ pub mod pallet {
 		/// Because this pallet emits events, it depends on the runtime's definition of an event.
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 
-		/// The Currency handler for the kitties pallet.
-		type Currency: Currency<Self::AccountId>;
+		///Time provider for getting timestamp
+		type TimeProvider: UnixTime;
 
-		/// The maximum amount of kitties a single account can own.
+		/// Maximum length for Oracle Event.
 		#[pallet::constant]
-		type MaxKittiesOwned: Get<u32>;
+		type OracleEventLength: Get<u32>;
 
-		/// The type of Randomness we want to specify for this pallet.
-		type KittyRandomness: Randomness<Self::Hash, Self::BlockNumber>;
+		/// Maximum time for storing an Oracle Event.
+		#[pallet::constant]
+		type MaxTimeForEvents: Get<u64>;
 	}
-
 	// Your Pallet's events.
 	#[pallet::event]
 	#[pallet::generate_deposit(pub(super) fn deposit_event)]
