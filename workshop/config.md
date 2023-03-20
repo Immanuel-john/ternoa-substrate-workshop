@@ -2,29 +2,27 @@
 
 To build our pallet, we need to include some custom configurations which will allow our pallet to gain access to outside interfaces like:
 
-* Manipulating user balances.
-* Generating on-chain randomness.
-* Setting limits for how many kitties an single user can own.
+* UnixTime from pallet timestamp so that we can clear up events which are residing more than the maximum time. 
+* Setting limits for the event feed length.
+* Setting limits for maximum time the event can be stored on our blockchain.
 
 We will introduce these to the `trait Config` for our Pallet.
 
 To do this, this we use a few different tools:
 
-* `Currency`: A trait that describes an interface to access and manipulate user balances. Also gives you access to the `Balance` type.
-* `Get<u32>`: A trait which simply fetches a `u32` value, allowing the user to configure the `MaxKittiesOwned`.
-* `Randomness`: A trait which describes an interface to access an on-chain random value.
+* `UnixTime`: A trait that gives access to get timestamp functionalities to this pallet.
+* `Get<u32>`: A trait which simply fetches a `u32` value, allowing the user to configure the `OracleEventLength`.
+* `Get<u32>`: A trait which simply fetches a `u64` value, allowing the user to configure the `MaxTimeForEvents`.
 
 We will use these interfaces in the future, but a sneak peak to how you might actually see these used in the code:
 
 ```rust
-// Make a balance transfer.
-T::Currency::transfer(from, to, amount, ExistenceRequirement::KeepAlive)?;
+// Get the current time in seconds
+let now: u64 = T::TimeProvider::now().as_secs();
 
-// Get the `MaxKittiesOwned` limit.
-let max_kitties: u32 = T::MaxKittiesOwned::get();
+// Get the `MaxTimeForEvents` limit.
+let max_time: u32 = T::MaxTimeForEvents::get();
 
-// Get a random value.
-let random_value = T::KittyRandomness::random(&[]).0;
 ```
 
 <!-- slide:break -->
@@ -33,10 +31,10 @@ let random_value = T::KittyRandomness::random(&[]).0;
 
 #### ** ACTION ITEMS **
 
-Import the `Currency` and `Randomness` traits to your project:
+Import the `UnixTime` trait to your project:
 
 ```rust
-use frame_support::traits::{Currency, Randomness};
+use frame_support::{traits::UnixTime};
 ```
 
 Then, update your `trait Config` to have the following:
@@ -48,15 +46,16 @@ pub trait Config: frame_system::Config {
 	/// Because this pallet emits events, it depends on the runtime's definition of an event.
 	type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 
-	/// The Currency handler for the kitties pallet.
-	type Currency: Currency<Self::AccountId>;
+	///Time provider for getting timestamp
+	type TimeProvider: UnixTime;
 
-	/// The maximum amount of kitties a single account can own.
+	/// Maximum length for Oracle Event.
 	#[pallet::constant]
-	type MaxKittiesOwned: Get<u32>;
+	type OracleEventLength: Get<u32>;
 
-	/// The type of Randomness we want to specify for this pallet.
-	type KittyRandomness: Randomness<Self::Hash, Self::BlockNumber>;
+	/// Maximum time for storing an Oracle Event.
+	#[pallet::constant]
+	type MaxTimeForEvents: Get<u64>;
 }
 ```
 
@@ -80,7 +79,7 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 
-	use frame_support::traits::{Currency, Randomness};
+	use frame_support::{traits::UnixTime};
 
 	// The struct on which we build all of our Pallet logic.
 	#[pallet::pallet]
@@ -96,15 +95,16 @@ pub mod pallet {
 		/// Because this pallet emits events, it depends on the runtime's definition of an event.
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 
-		/// The Currency handler for the kitties pallet.
-		type Currency: Currency<Self::AccountId>;
+		///Time provider for getting timestamp
+		type TimeProvider: UnixTime;
 
-		/// The maximum amount of kitties a single account can own.
+		/// Maximum length for Oracle Event.
 		#[pallet::constant]
-		type MaxKittiesOwned: Get<u32>;
+		type OracleEventLength: Get<u32>;
 
-		/// The type of Randomness we want to specify for this pallet.
-		type KittyRandomness: Randomness<Self::Hash, Self::BlockNumber>;
+		/// Maximum time for storing an Oracle Event.
+		#[pallet::constant]
+		type MaxTimeForEvents: Get<u64>;
 	}
 
 	// Your Pallet's events.
