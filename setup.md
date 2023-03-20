@@ -66,5 +66,9 @@ pub mod pallet {
 
 	// Your Pallet's internal functions.
 	impl<T: Config> Pallet<T> {}
+
+	#[pallet::hooks]
+	impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
+
 }
 ```

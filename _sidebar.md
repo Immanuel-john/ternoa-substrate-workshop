@@ -17,7 +17,7 @@
 	* [Config](workshop/config.md)
 	* [Custom Types](workshop/custom-types.md)
 	* [Custom Storage](workshop/custom-storage.md)
-	* [Create Kitty](workshop/create-kitty.md)
+	* [Feed Event](workshop/feed-event.md)
 	* [Transfer](workshop/transfer.md)
 	* [Set Price](workshop/set-price.md)
 	* [Buy Kitty](workshop/buy-kitty.md)

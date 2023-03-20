@@ -28,7 +28,7 @@
   * [add-pallet](workshop/add-pallet.md)
   * [Buy Kitty](workshop/buy-kitty.md)
   * [Configuring Your Pallet](workshop/config.md)
-  * [Create Kitty](workshop/create-kitty.md)
+  * [Feed Event](workshop/feed-event.md)
   * [Custom Storage](workshop/custom-storage.md)
   * [Custom Types](workshop/custom-types.md)
   * [launch](workshop/launch.md)
