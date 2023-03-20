@@ -9,7 +9,7 @@ WebAssembly compatibility enables provability, verification and upgradability of
 Substrate provides a way to easily write runtime logic using pallets written with [FRAME](https://docs.substrate.io/fundamentals/runtime-development/#frame) &mdash; Substrate's opinionated toolkit for writing runtime logic.
 You can think of comparing the runtime of a Substrate blockchain to a crate, carrying all of its business logic in a multitude of different pallets.
 
-In this workshop, we'll focus on writing a pallet for a blockchain specialized in managing the decentralized creation and ownership of crypto Kitties.
+In this workshop, we'll focus on writing a pallet for a blockchain specialized in feeding oracle event. 
 
 <!-- slide:break-40 -->
 
