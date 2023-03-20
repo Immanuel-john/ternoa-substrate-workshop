@@ -27,7 +27,7 @@ So let's get right to it!
 
 <!-- slide:break -->
 
-<img src="assets/qr-code.png" alt="qr-code" width="150"/>
+<img src="assets/new-qr-code.png" alt="qr-code" width="150"/>
 
 ![substrate](assets/final-polkadotjs.png)
 
