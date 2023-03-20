@@ -14,9 +14,9 @@ cargo build -p pallet-template
 
 Compiler warnings are OK.
 
-If you have any questions, please let us know and take advantage of the [notes section](notes.md) to share any text easily with others.
+If you have any questions, please let me know.
 
 
 <!-- slide:break -->
 
-![Kitty](../assets/kitty3.png)
+![Kitty](../assets/runtime-and-frame.png)
