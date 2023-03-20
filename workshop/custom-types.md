@@ -60,7 +60,7 @@ pub mod pallet {
 	use frame_support::pallet_prelude::*;
 	use frame_system::pallet_prelude::*;
 
-	use frame_support::traits::{Currency, Randomness};
+	use frame_support::{traits::UnixTime};
 
 	// The basis which we buil
 	#[pallet::pallet]
