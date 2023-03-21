@@ -208,7 +208,7 @@ pub mod pallet {
 		/// It takes two main parameters : event_name & event_details.
 		/// This extrinsic fails when event length gets exceeded.
 		#[pallet::call_index(0)]
-		#[pallet::weight(T::WeightInfo::feed_event())]
+    		#[pallet::weight(0)]
 		pub fn feed_event(
 			origin: OriginFor<T>,
 			event_name: BoundedVec<u8, T::OracleEventLength>,
