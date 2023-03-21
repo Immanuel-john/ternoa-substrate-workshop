@@ -31,4 +31,3 @@ So let's get right to it!
 
 ![substrate](assets/final-polkadotjs.png)
 
-**Acknowledgements:** thank you to Shawn for the original tutorial.
