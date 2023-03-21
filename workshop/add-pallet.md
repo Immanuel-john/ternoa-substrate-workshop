@@ -29,11 +29,16 @@ Let's try it out next!
 1. Update the `pallet_template::Config` to match the following:
 
 ```rust
+parameter_types! {
+	pub const OracleEventLength: u32 = 150;
+	pub const MaxTimeForEvents: u64 = 100;
+}
+
 impl pallet_template::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
-	type Currency = Balances;
-	type KittyRandomness = RandomnessCollectiveFlip;
-	type MaxKittiesOwned = frame_support::pallet_prelude::ConstU32<100>;
+	type TimeProvider = Timestamp;
+	type OracleEventLength = OracleEventLength;
+	type MaxTimeForEvents = MaxTimeForEvents;
 }
 ```
 
@@ -55,7 +60,7 @@ construct_runtime!(
 		Balances: pallet_balances,
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
-		SubstrateKitties: pallet_template, // <-- Update name here
+		Oracle: pallet_template, // <-- Update name here
 	}
 );
 ```
