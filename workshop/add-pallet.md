@@ -42,7 +42,7 @@ impl pallet_template::Config for Runtime {
 }
 ```
 
-2. Finally, update the naming of the pallet in the `construct_runtime!` macro to `SubstrateKitties`:
+2. Finally, update the naming of the pallet in the `construct_runtime!` macro to `Oracle`:
 
 ```rust
 // Create the runtime by composing the FRAME pallets that were previously configured.
