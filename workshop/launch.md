@@ -18,9 +18,10 @@ cargo build --release
 
 4. Then head to "Developer -> Extrinsics" and submit a transaction using the `Oracle` pallet.
 
+<!-- slide:break -->
+
 ![Polkadot JS Apps](../assets/polkadot-apps.png)
 
-<!-- slide:break -->
 
 
 Congratulations for completing this workshop with us! 🥳
