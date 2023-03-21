@@ -22,4 +22,3 @@
 
 * [Launch](workshop/launch.md)
 * [What's next?](workshop/whats-next.md)
-* [Notes](notes.md)
